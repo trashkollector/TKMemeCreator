@@ -10,6 +10,7 @@ import random
 #  TK Collector - Custom Node for Meme Creation
 #  August 9, 2025
 #  https://github.com/trashkollector/TKMemeCreator
+#  https://civitai.com/user/trashkollector175
     
 class TKMemeCreator:
 
@@ -57,10 +58,7 @@ class TKMemeCreator:
         
         colorTop = (0, 255, 0)
         colorBottom = (0, 255, 0)
-        text_position_top = (50, 50)
-        text_position_bottom = (50, height - 60)
-        
-        
+         
         font = cv2.FONT_HERSHEY_TRIPLEX 
         scale = 2
         thickness=5
@@ -75,8 +73,19 @@ class TKMemeCreator:
            scale = 1.6
            thickness=4
            
+        #center
+        (text_width, text_height), baseline = cv2.getTextSize(top_text, font, scale, thickness)
+        x=0
+        if (text_width < width) :
+           x = (width - text_width) /2 
+        text_position_top = ( int(x)  ,50)
         
-        thickness = 5
+        (text_width, text_height), baseline = cv2.getTextSize(bottom_text, font, scale, thickness)
+        x=0
+        if (text_width < width) :
+           x = (width - text_width) /2 
+        text_position_bottom = ( int(x)  ,height - 60)
+        
         
         # Generate a random waveform function along the y-axis - used for wobble
         y_trans = self.generate_translation(frame_count, 16, tuple([0.5, 2.5]), tuple([5.0,10.0]))
@@ -95,14 +104,40 @@ class TKMemeCreator:
         for frame in video_numpy: 
             if (i >= frame_count-1) :
                 break
+                
+            phase2=False
+            if    int(  float(i) / fps ) >= num_secs_delay_end_text :
+                phase2=True
 
             if (wobble_text) :
-                frame = self.printText(frame, top_text, (text_position_top[0]+ int(x_trans[i]), text_position_top[1]+ int(y_trans[i])), font, scale, 
-                                       self.getColor(color_start_text), thickness, color_start_text)
+                if phase2 :
+                    frame = self.printText(frame, 
+                                           top_text, 
+                                           ( text_position_top[0], text_position_top[1] ), 
+                                           font, 
+                                           scale, 
+                                           self.getColor(color_start_text), 
+                                           thickness, 
+                                           color_start_text)
+                else :
+                    frame = self.printText(frame, 
+                                           top_text, 
+                                           (text_position_top[0]+ int(x_trans[i]), text_position_top[1]+ int(y_trans[i])), 
+                                           font, 
+                                           scale, 
+                                           self.getColor(color_start_text), 
+                                           thickness, 
+                                           color_start_text)
             
-                if    int(  float(i) / fps ) >= num_secs_delay_end_text :
-                     frame = self.printText(frame, bottom_text, (text_position_bottom[0]+ int(x_trans[i]), text_position_bottom[1]+ int(y_trans[i])), 
-                                font, scale, self.getColor(color_end_text), thickness, color_end_text)
+                if   phase2 :
+                     frame = self.printText(frame, 
+                                            bottom_text, 
+                                           (text_position_bottom[0]+ int(x_trans[i]), text_position_bottom[1]+ int(y_trans[i])), 
+                                           font, 
+                                           scale,
+                                           self.getColor(color_end_text), 
+                                           thickness, 
+                                           color_end_text)
             else :
                 frame = self.printText(frame, top_text, text_position_top, font, scale, 
                                        self.getColor(color_start_text), thickness, color_start_text)
@@ -137,6 +172,7 @@ class TKMemeCreator:
          frame = cv2.putText(frame, text, text_position, font, scale, outcol, thickness+ thickness)
          
          frame = cv2.putText(frame, text, text_position, font, scale, color, thickness)
+         
          return frame
     
     def getColor(self, colorStr) :
