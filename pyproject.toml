@@ -1,0 +1,14 @@
+[project]
+name = "ComfyUI-TKMemeCreator"
+description = "Create A Meme"
+version = "1.00"
+license = { file = "LICENSE" }
+
+[project.urls]
+Repository = "https://github.com/trashkollector/TKMemeCreator"
+
+[tool.comfy]
+PublisherId = "trashkollector"
+DisplayName = "ComfyUI-TKMemeCreator"
+Icon = ""
+
