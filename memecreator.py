@@ -63,6 +63,19 @@ class TKMemeCreator:
         
         font = cv2.FONT_HERSHEY_TRIPLEX 
         scale = 2
+        thickness=5
+        
+        if (width < 500) :
+           scale =0.7
+           thickness=1
+        elif (width < 700) :
+           scale = 1.2
+           thickness=3
+        elif (width < 900) :
+           scale = 1.6
+           thickness=4
+           
+        
         thickness = 5
         
         # Generate a random waveform function along the y-axis - used for wobble
@@ -83,10 +96,20 @@ class TKMemeCreator:
             if (i >= frame_count-1) :
                 break
 
-            frame = self.printText(frame, top_text, text_position_top, font, scale, self.getColor(color_start_text), thickness, color_start_text)
+            if (wobble_text) :
+                frame = self.printText(frame, top_text, (text_position_top[0]+ int(x_trans[i]), text_position_top[1]+ int(y_trans[i])), font, scale, 
+                                       self.getColor(color_start_text), thickness, color_start_text)
             
-            if    int(  float(i) / fps ) >= num_secs_delay_end_text :
-                 frame = self.printText(frame, bottom_text, text_position_bottom, font, scale, self.getColor(color_end_text), thickness, color_end_text)
+                if    int(  float(i) / fps ) >= num_secs_delay_end_text :
+                     frame = self.printText(frame, bottom_text, (text_position_bottom[0]+ int(x_trans[i]), text_position_bottom[1]+ int(y_trans[i])), 
+                                font, scale, self.getColor(color_end_text), thickness, color_end_text)
+            else :
+                frame = self.printText(frame, top_text, text_position_top, font, scale, 
+                                       self.getColor(color_start_text), thickness, color_start_text)
+            
+                if    int(  float(i) / fps ) >= num_secs_delay_end_text :
+                     frame = self.printText(frame, bottom_text, text_position_bottom, 
+                                font, scale, self.getColor(color_end_text), thickness, color_end_text)    
 
             frames.append(frame)
             
@@ -111,7 +134,7 @@ class TKMemeCreator:
          if (colorStr == "black" or colorStr=="blue") :
              outcol=(255,255,255)
              
-         frame = cv2.putText(frame, text, text_position, font, scale, outcol, thickness+4)
+         frame = cv2.putText(frame, text, text_position, font, scale, outcol, thickness+ thickness)
          
          frame = cv2.putText(frame, text, text_position, font, scale, color, thickness)
          return frame
@@ -127,6 +150,8 @@ class TKMemeCreator:
             return (0,0,255)
         elif colorStr =="green" :
             return (0,255,0)
+        elif colorStr =="yellow" :
+            return (255,255,0)    
       
     def generate_translation(
         self,
