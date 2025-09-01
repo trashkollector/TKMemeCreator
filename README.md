@@ -2,6 +2,12 @@
 Meme Creator for ComfyUI
 
 
+
+https://github.com/user-attachments/assets/15001eb1-0d2f-48ce-9fd2-227ec20dccbd
+
+
+
+
 for manual install
 ---------------------
 https://github.com/trashkollector/TKMemeCreator
