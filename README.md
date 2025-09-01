@@ -1,5 +1,7 @@
+# Node can found in ComfyUI Manager
+
 # TKMemeCreator
-Meme Creator for ComfyUI
+Meme Creator for ComfyUI -   Take a video and MEMEify it .
 
 
 
