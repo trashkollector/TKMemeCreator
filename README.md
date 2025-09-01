@@ -2,6 +2,7 @@
 
 # TKMemeCreator
 Meme Creator for ComfyUI -   Take a video and MEMEify it .
+Create an MP4 or GIF.
 
 
 
